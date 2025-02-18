@@ -1,0 +1,10 @@
+boto3
+numpy
+streamlit
+PyPDF2
+faiss-cpu
+yfinance
+google-generativeai
+google-auth
+streamlit
+python-dotenv
