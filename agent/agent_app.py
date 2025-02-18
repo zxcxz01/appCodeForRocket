@@ -3,11 +3,14 @@ import agent_lib as glib
 import pandas as pd
 import uuid
 import json
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 # config
-AGENT_ID = "KWSVXVUCNM"
-AGENT_ALIAS_ID = "KRBEM4SFK9"
+AGENT_ID = os.getenv("AGENT_ID")
+AGENT_ALIAS_ID = os.getenv("AGENT_ALIAS_ID")
 
 
 # function
