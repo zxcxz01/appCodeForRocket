@@ -1,0 +1,41 @@
+name: Python application7
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+
+    - name: Docker Image Build
+      run: docker build -t ${{ secrets.AWS_ECR_IMAGE }} .
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: us-west-2
+
+    - name: Log in to Amazon ECR
+      run: |
+        aws ecr get-login-password --region us-west-2 | \
+        docker login --username AWS --password-stdin 
+
+    - name: Tag Docker Image for ECR
+      run: |
+        docker tag eks-gitops-demo:latest ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
+
+    - name: Push Docker Image to ECR
+      run: |
+        docker push ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
