@@ -31,7 +31,7 @@ jobs:
       run: docker build -t ${{ secrets.AWS_ECR_IMAGE }} .
 
     - name: Tag to Image
-      run: docker tag ${{ secrets.AWS_ECR_IMAGE }}:latest ${{ secrets.AWS_ECR_URL }}:latest
+      run: docker tag ${{ secrets.AWS_ECR_IMAGE }}:latest ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
 
     - name: Push Image to ECR
       run: docker push ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
