@@ -1,4 +1,4 @@
-name: Python application7
+name: Build and Deploy with Image Tag Update
 
 on:
   push:
@@ -11,30 +11,88 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
+      # 1. 애플리케이션 코드 체크아웃
+      - uses: actions/checkout@v4
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-        aws-region: us-west-2
+      # 2. Python 설정 (필요 시)
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
 
-    - name: Authorize Docker client
-      run: aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
+      # 3. AWS 자격증명 설정
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-west-2
 
-    - name: Docker Image Build
-      run: docker build -t ${{ secrets.AWS_ECR_IMAGE }} .
+      # 4. Docker 클라이언트 인증 (ECR)
+      - name: Authorize Docker client
+        run: |
+          aws ecr get-login-password --region us-west-2 \
+            | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
 
-    - name: Tag to Image
-      run: docker tag ${{ secrets.AWS_ECR_IMAGE }}:latest ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
+      # 5. Docker 이미지 빌드
+      - name: Docker Image Build
+        run: docker build -t ${{ secrets.AWS_ECR_IMAGE }} .
 
-    - name: Push Image to ECR
-      run: docker push ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
+      # 6. 새 태그 부여 (GitHub Run Number 사용)
+      - name: Tag image with new version
+        id: tag_image
+        run: |
+          NEW_TAG=${GITHUB_RUN_NUMBER}
+          echo "Using new tag: $NEW_TAG"
+          docker tag ${{ secrets.AWS_ECR_IMAGE }}:latest ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:$NEW_TAG
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+
+      # 7. 새 태그 이미지 ECR에 푸시
+      - name: Push image to ECR with new tag
+        run: |
+          docker push ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:$NEW_TAG
+
+      # 8. ManifestRepo (ArgoCD가 관리하는 배포 YAML이 있는 리포) 체크아웃
+      - name: Checkout Manifest Repository
+        uses: actions/checkout@v4
+        with:
+          repository: Byun-Sung-Ho/ManifestRepo
+          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          path: manifest
+
+      # 9. deployment.yaml 내 이미지 태그 업데이트 후 커밋 및 푸시
+      - name: Update deployment image tag in manifest
+        working-directory: manifest
+        run: |
+          echo "Updating deployment.yaml with new tag ${NEW_TAG}"
+          sed -i "s|${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:.*|${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:${NEW_TAG}|g" deployment.yaml
+          
+          # Git 사용자 설정 (CI 봇 정보)
+          git config --global user.email "ci-bot@example.com"
+          git config --global user.name "CI Bot"
+          
+          git add deployment.yaml
+          git commit -m "Update image tag to ${NEW_TAG} [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:main
+
+#name: Python application7
+#
+#on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: Set up Python 3.10
+#      uses: actions/setup-python@v3
+#      with:
+#        python-version: "3.10"
 #
 #    - name: Configure AWS credentials
 #      uses: aws-actions/configure-aws-credentials@v1
@@ -43,15 +101,34 @@ jobs:
 #        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
 #        aws-region: us-west-2
 #
-#    - name: Log in to Amazon ECR
-#      run: |
-#        aws ecr get-login-password --region us-west-2 | \
-#        docker login --username AWS --password-stdin
+#    - name: Authorize Docker client
+#      run: aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
 #
-#    - name: Tag Docker Image for ECR
-#      run: |
-#        docker tag eks-gitops-demo:latest ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
+#    - name: Docker Image Build
+#      run: docker build -t ${{ secrets.AWS_ECR_IMAGE }} .
 #
-#    - name: Push Docker Image to ECR
-#      run: |
-#        docker push ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
+#    - name: Tag to Image
+#      run: docker tag ${{ secrets.AWS_ECR_IMAGE }}:latest ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
+#
+#    - name: Push Image to ECR
+#      run: docker push ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
+##
+##    - name: Configure AWS credentials
+##      uses: aws-actions/configure-aws-credentials@v1
+##      with:
+##        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+##        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+##        aws-region: us-west-2
+##
+##    - name: Log in to Amazon ECR
+##      run: |
+##        aws ecr get-login-password --region us-west-2 | \
+##        docker login --username AWS --password-stdin
+##
+##    - name: Tag Docker Image for ECR
+##      run: |
+##        docker tag eks-gitops-demo:latest ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
+##
+##    - name: Push Docker Image to ECR
+##      run: |
+##        docker push ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:latest
