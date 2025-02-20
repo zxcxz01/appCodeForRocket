@@ -52,7 +52,7 @@ def display_recommendations(container, trace):
 
 # main page
 st.set_page_config(page_title="Stock Analyzer")
-st.title("Bedrock Agent 주식 분석v3")
+st.title("🚀로켓단 8기 Bedrock Agent")
 
 input_text = st.text_input("종목명을 입력하세요  (한글 이름 or 영어 이름 or 야후 파이낸스 ticker 입력 가능)")
 submit_button = st.button("분석 시작", type="primary")
