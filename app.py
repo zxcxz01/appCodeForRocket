@@ -8,7 +8,6 @@ load_dotenv()
 
 ## 키 입력해주기
 my_api_key = os.getenv("GOOGLE_API_KEY")
-# my_api_key = "AIzaSyBxZemX60BWmK25nlhBPAwAZdCW-6Bqs_4"
 genai.configure(api_key=my_api_key)
 
 ##제목을 위에 적어주기
