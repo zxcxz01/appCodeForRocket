@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  ECR_URL: ${{ secrets.AWS_ECR_RUL }}
+  ECR_IMAGE: ${{ secrets.AWS_ECT_IMAGE }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,7 +36,7 @@ jobs:
       - name: Authorize Docker client
         run: |
           aws ecr get-login-password --region us-west-2 \
-            | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
+            | docker login --username AWS --password-stdin ${{ env.ECR_URL }}
 
       # 5. Docker 이미지 빌드
       - name: Docker Image Build
@@ -44,13 +48,13 @@ jobs:
         run: |
           NEW_TAG=${GITHUB_RUN_NUMBER}
           echo "Using new tag: $NEW_TAG"
-          docker tag ${{ secrets.AWS_ECR_IMAGE }}:latest ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:$NEW_TAG
+          docker tag ${{ env.ECR_IMAGE }}:latest ${{ env.ECR_URL }}/${{ env.ECR_IMAGE }}:$NEW_TAG
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
 
       # 7. 새 태그 이미지 ECR에 푸시
       - name: Push image to ECR with new tag
         run: |
-          docker push ${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:$NEW_TAG
+          docker push ${{ env.ECR_URL }}/${{ env.ECR_IMAGE }}:$NEW_TAG
 
       # 8. ManifestRepo (ArgoCD가 관리하는 배포 YAML이 있는 리포) 체크아웃
       - name: Checkout Manifest Repository
@@ -65,7 +69,7 @@ jobs:
         working-directory: manifest
         run: |
           echo "Updating deployment.yaml with new tag ${NEW_TAG}"
-          sed -i "s|${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:.*|${{ secrets.AWS_ECR_URL }}/${{ secrets.AWS_ECR_IMAGE }}:${NEW_TAG}|g" deployment.yaml
+          sed -i "s|${{ env.ECR_URL }}/${{ env.ECR_IMAGE }}:.*|${{ env.ECR_URL }}/${{ env.ECR_IMAGE }}:${NEW_TAG}|g" deployment.yaml
           
           # Git 사용자 설정 (CI 봇 정보)
           git config --global user.email "ci-bot@example.com"
