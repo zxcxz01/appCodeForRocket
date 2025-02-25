@@ -4,17 +4,17 @@
 ![Cloud](https://img.shields.io/badge/Cloud-AWS-blue) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
 ## Project Information
-* Member :
-  * 김영광 [kimyounggwang](https://github.com/zxcxz01)
-  * 변성호 [byunsungho](https://github.com/Byun-Sung-Ho)
-  * 정소은 [jeongsoeun](https://github.com/sssoeun)
-  * 최건우 [choigunwoo](https://github.com/gunwoo8873)
+* Member :  
+  김영광 [kimyounggwang](https://github.com/zxcxz01)  
+  변성호 [byunsungho](https://github.com/Byun-Sung-Ho)  
+  정소은 [jeongsoeun](https://github.com/sssoeun)  
+  최건우 [choigunwoo](https://github.com/gunwoo8873)  
 
-* Dev Data :
-  * 2025. 02. 04 ~ 2025. 02. 26
+* Dev Data :  
+  2025. 02. 04 ~ 2025. 02. 26
 
-* Description :
-  * 이 프로젝트는 AWS의 EKS를 활용하여 K8S환경 하에서 동작하는 AI chatbot service의 CI/CD를 구현한 프로젝트입니다
+* Description :  
+  이 프로젝트는 AWS의 EKS를 활용하여 K8S환경 하에서 동작하는 AI chatbot service의 CI/CD를 구현한 프로젝트입니다
 
 <!--## 📝 프로젝트 개요
 이 프로젝트는 AWS의 EKS를 활용하여 K8S환경 하에서 동작하는 AI chatbot service의 CI/CD를 구현한 프로젝트입니다.-->
