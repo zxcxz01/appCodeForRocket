@@ -11,6 +11,15 @@
 - ✅ **기능 3**: GitHub Actions을 활용한 CI/CD
 - ✅ **기능 4**: Discode bot 활용 AWS 리소스 관리
 
+> [!WARNING]
+> **Current Other project discord bot is test version.**
+> **Errors may occur while using it, and do not push the .env file to the github repository**  
+> **Make your Discord bot token, channel ID and AWS all config private or use a database to verify security**
+
+> [!NOTE]
+> **Other porject :** [Rust-Discord-Bot](https://github.com/gunwoo8873/Rust-DiscordBot)
+
+
 ## 🛠️ 사용 기술 및 인프라
 | 카테고리  | 기술 스택  |
 |----------|----------|
