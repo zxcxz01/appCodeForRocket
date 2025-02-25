@@ -3,6 +3,9 @@ name: Build and Deploy with Image Tag Update
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - "./Docs/*.md"
+      - "README.md"
   pull_request:
     branches: [ "main" ]
 
