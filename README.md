@@ -19,12 +19,3 @@
 | **모니터링** | Prometheus, Grafana, AWS CloudWatch |
 | **보안** | IAM, Security Groups, WAF |
 
-## 📁 프로젝트 구조
-```bash
-📂 프로젝트명
- ┣ 📂 infrastructure      # IaC 스크립트 (Terraform, CloudFormation 등)
- ┣ 📂 src                # 애플리케이션 소스 코드
- ┣ 📂 scripts            # 배포 및 자동화 스크립트
- ┣ 📜 README.md          # 프로젝트 문서
- ┣ 📜 .gitignore         # Git 무시 파일 목록
- ┗ 📜 LICENSE            # 라이선스 정보
