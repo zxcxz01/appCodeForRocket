@@ -1,4 +1,5 @@
-# 🌥️ 클라우드 프로젝트 명
+# Stock AI agent project
+<!-- 🌥️ -->
 
 ![Cloud](https://img.shields.io/badge/Cloud-AWS%2FAzure%2FGCP-blue) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
@@ -11,12 +12,8 @@
 - ✅ **기능 3**: GitHub Actions을 활용한 CI/CD
 - ✅ **기능 4**: Discode bot 활용 AWS 리소스 관리
 
-> [!WARNING]
-> **Current Other project discord bot is test version.**  
-> **Errors may occur while using it, and do not push the .env file to the github repository**  
-> **Make your Discord bot token, channel ID and AWS all config private or use a database to verify security**
-
 > [!NOTE]
+> **Want do looking for other projects click to url link**  
 > **Other porject :** [Rust-Discord-Bot](https://github.com/gunwoo8873/Rust-DiscordBot)
 
 
@@ -28,4 +25,3 @@
 | **CI/CD** | GitHub Actions, ArgoCD |
 | **모니터링** | Prometheus, Grafana, AWS CloudWatch |
 | **보안** | IAM, Security Groups, WAF |
-
