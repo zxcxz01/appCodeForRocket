@@ -47,3 +47,8 @@
   <img src="./img/Bedrock-architecture.png" alt="" width=600>
 </figure>
 
+## CI/CD architecture
+<figure align="center">
+  <img src="./img/CI-CD-architecture.png" alt="" width=600>
+</figure>
+
