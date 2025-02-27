@@ -41,3 +41,9 @@
 | **CI/CD** | GitHub Actions, ArgoCD |
 | **모니터링** | Prometheus, Grafana, AWS CloudWatch |
 | **보안** | IAM, Security Groups, WAF |
+
+## Bedrock agent architecture
+<figure align="center">
+  <img src="./img/Bedrock-architecture.png" alt="" width=600>
+</figure>
+
