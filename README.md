@@ -44,11 +44,11 @@
 
 ## Bedrock agent architecture
 <figure align="center">
-  <img src="./img/Bedrock-architecture.png" alt="" width=600>
+  <img src="./img/infra-architecture.png" alt="" width=600>
 </figure>
 
 ## CI/CD architecture
 <figure align="center">
-  <img src="./img/CI-CD-architecture.png" alt="" width=600>
+  <img src="./img/cicd-architecture.png" alt="" width=600>
 </figure>
 
