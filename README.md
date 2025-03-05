@@ -2,7 +2,7 @@
 <!-- 🌥️ -->
 
 <figure align="center">
-  <img src="./img/Rocket-bedrock-agent-openai.png" alt="" width=600>
+  <img src="./img/bedrock-agent.png" alt="" width=600>
 </figure>
 
 ![Cloud](https://img.shields.io/badge/Cloud-AWS-blue) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
